@@ -254,13 +254,13 @@ module.exports = (function() {
 		'keys': {
 			'enumerable': true,
 			'value': function() {
-				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._keys).map(function(h) { return this._keys[h] }));
+				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._keys).map(function(h) { return this._keys[h] }, this));
 			}
 		},
 		'values': {
 			'enumerable': true,
 			'value': function() {
-				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._values).map(function(h) { return this._values[h] }));
+				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._values).map(function(h) { return this._values[h] }, this));
 			}
 		}
 	});

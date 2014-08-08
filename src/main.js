@@ -4,6 +4,10 @@
 		'Map': {
 			'enumerable': true,
 			'value': require('./Map')
+		},
+		'Set': {
+			'enumerable': true,
+			'value': require('./Set')
 		}
 	});
 })();
