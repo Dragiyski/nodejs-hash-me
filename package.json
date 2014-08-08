@@ -1,0 +1,24 @@
+{
+	"name": "hash-me",
+	"author": {
+		"name": "Plamen Dragiyski",
+		"email": "plamen@dragiyski.org"
+	},
+	"description": "Simple hash-based collections implementation.",
+	"keywords": [
+		"hash",
+		"collection",
+		"map",
+		"set",
+		"weakmap"
+	],
+	"scripts": {
+		"install": "node ./install.js"
+	},
+	"dependencies": {
+		"node-gyp": "1.0.1",
+		"mkdirp": "latest"
+	},
+	"main": "src/main.js",
+	"version": "0.0.1"
+}
