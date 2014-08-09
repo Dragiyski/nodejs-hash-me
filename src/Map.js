@@ -29,6 +29,16 @@ module.exports = (function() {
 		'name': {
 			'value': 'Map'
 		},
+		'length': {
+			'enumerable': true,
+			'get': function() {
+				var l = 0;
+				for(var i in this._keys) {
+					l += this._keys[i].length;
+				}
+				return l;
+			}
+		},
 		//Modifiers
 		'set': {
 			'enumerable': true,
@@ -261,6 +271,12 @@ module.exports = (function() {
 			'enumerable': true,
 			'value': function() {
 				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._values).map(function(h) { return this._values[h] }, this));
+			}
+		},
+		'isEmpty': {
+			'enumerable': true,
+			'value': function() {
+				Object.getOwnPropertyNames(this._keys).length === 0;
 			}
 		}
 	});
