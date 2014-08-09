@@ -220,4 +220,5 @@ module.exports = (function() {
 			}
 		}
 	});
+	return Relation;
 })();
