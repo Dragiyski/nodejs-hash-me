@@ -263,7 +263,7 @@ module.exports = (function() {
 		'isEmpty': {
 			'enumerable': true,
 			'value': function() {
-				Object.getOwnPropertyNames(this._values).length === 0;
+				return Object.getOwnPropertyNames(this._values).length === 0;
 			}
 		}
 	});

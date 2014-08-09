@@ -8,6 +8,10 @@
 		'Set': {
 			'enumerable': true,
 			'value': require('./Set')
+		},
+		'Relation': {
+			'enumerable': true,
+			'value': require('./Relation')
 		}
 	});
 })();
