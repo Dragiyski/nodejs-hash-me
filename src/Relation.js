@@ -1,6 +1,6 @@
 module.exports = (function() {
 	"use strict";
-	var hash = require('./hash'), Map = require('./Map'), Set = require('./Set');
+	var Map = require('./Map'), Set = require('./Set');
 
 	function Relation() {
 		Object.defineProperties(this, {
@@ -23,7 +23,7 @@ module.exports = (function() {
 		'length': {
 			'enumerable': true,
 			'get': function() {
-				return this.reduce(function(previous, left, right) {
+				return this.reduce(function(previous) {
 					return previous + 1;
 				}, 0, this);
 			}
