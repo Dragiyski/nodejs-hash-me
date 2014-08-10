@@ -267,4 +267,5 @@ module.exports = (function() {
 			}
 		}
 	});
+	return Set;
 })();
