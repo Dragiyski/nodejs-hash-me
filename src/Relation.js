@@ -77,10 +77,6 @@ module.exports = (function() {
 				return Object.create(Set.prototype, {
 					'_values': {
 						'value': v
-					},
-					'_length': {
-						'writable': true,
-						'_length': s._length
 					}
 				});
 			}
@@ -98,10 +94,6 @@ module.exports = (function() {
 				return Object.create(Set.prototype, {
 					'_values': {
 						'value': v
-					},
-					'_length': {
-						'writable': true,
-						'_length': s._length
 					}
 				});
 			}
