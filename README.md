@@ -1540,6 +1540,8 @@ The __Graph__ class is still beta, more operations expected to be added.
 * [childNodes](#method.Graph.childNodes)
 * [deleteEdge](#method.Graph.deleteEdge)
 * [deleteNode](#method.Graph.deleteNode)
+* [getEdge](#method.Graph.getEdge)
+* [getNode](#method.Graph.getNode)
 * [hasEdge](#method.Graph.hasEdge)
 * [hasNode](#method.Graph.hasNode)
 * [incomingEdges](#method.Graph.incomingEdges)
@@ -1639,6 +1641,42 @@ function deleteNode(value:*):Array
 Return an array with following indexes:
 * At index 0 is the number of nodes removed from the graph.
 * At index 1 is the number of edges removed from the graph.
+
+#### <a name="method.Graph.getEdge">Graph.getEdge</a>
+
+Gets the value mapped to a connection between two nodes in the network. If no edge matching the search is found, 
+__undefined__ is returned.
+
+```
+function getEdge(parent:*, child:*):*
+```
+
+##### Arguments
+
+1. parent - Where the should should come from.
+2. child - Where the edge should go to.
+
+##### Return
+
+Returns the value mapped for the found edge or __undefined__ if edge is not found. Be aware that __undefined__ can also 
+be mapped to an edge.
+
+#### <a name="method.Graph.getNode">Graph.getNode</a>
+
+Gets the value mapped to a node in the network.
+
+```
+function getNode(node:*):*
+```
+
+##### Arguments
+
+1. node - A value to find in the network.
+
+##### Return
+
+Returns the value mapped to that node or __undefined__ if node is not found. Be aware that __undefined__ can also be 
+mapped to a node.
 
 #### <a name="method.Graph.hasEdge">Graph.hasEdge</a>
 
