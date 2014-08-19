@@ -15,45 +15,18 @@
 
 #include <v8.h>
 #include <node.h>
-#include <type_traits>
-
-#define THROW_EXCEPTION(T, ...) v8::ThrowException(v8::Exception::T(StringConcat(__VA_ARGS__)))
-#define RETURN_THROW_EXCEPTION(T, ...) return scope.Close(THROW_EXCEPTION(T, __VA_ARGS__))
 
 namespace {
-    template<typename Last> inline v8::Handle<v8::String> StringConcat(Last last) {
-        return last;
-    }
-
-    template<> inline v8::Handle<v8::String> StringConcat<const char*>(const char* text) {
-        return v8::String::New(text);
-    }
-
-    template<> inline v8::Handle<v8::String> StringConcat<v8::Handle<v8::Value>>(v8::Handle<v8::Value> val) {
-        if (val.IsEmpty()) {
-            return v8::String::Empty();
-        }
-        return val->ToString();
-    }
-
-    template<> inline v8::Handle<v8::String> StringConcat<v8::Handle<v8::String>>(v8::Handle<v8::String> val) {
-        if (val.IsEmpty()) {
-            return v8::String::Empty();
-        }
-        return val;
-    }
-
-    template<typename First, typename ... Rest> inline v8::Handle<v8::String> StringConcat(First first, Rest ... rest) {
-        return v8::String::Concat(StringConcat<First>(first), StringConcat<Rest...>(rest...));
-    }
-
     v8::Handle<v8::Value> MakeObjectHash(const v8::Arguments& arguments) {
         v8::HandleScope scope;
         if (arguments.IsConstructCall()) {
-            RETURN_THROW_EXCEPTION(TypeError, "Invalid constructor");
+            return scope.Close(v8::ThrowException(v8::Exception::TypeError(v8::String::New("Invalid constructor"))));
         }
         if (!arguments[0]->IsObject()) {
-            RETURN_THROW_EXCEPTION(TypeError, "Expected arguments[0] to be object, got ", arguments[0]->ToDetailString());
+        return scope.Close(v8::ThrowException(v8::Exception::TypeError(v8::String::Concat(
+            v8::String::New("Expected arguments[0] to be object, got "),
+            arguments[0]->ToDetailString()
+        ))));
         }
         return scope.Close(v8::Integer::New(arguments[0].As<v8::Object>()->GetIdentityHash()));
     }
