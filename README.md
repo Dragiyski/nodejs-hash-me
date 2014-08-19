@@ -2,6 +2,8 @@
 
 Hash-me is a  node.js module for hash-based collections.
 
+[![Build Status](https://travis-ci.org/Dragiyski/nodejs-hash-me.svg?branch=master)](https://travis-ci.org/Dragiyski/nodejs-hash-me)
+
 ## <a name="collection-types">Types of collections</a>
 
 The library separate collections into two types - [storage](#type.storage) and [mapping](#type.mapping).
