@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	"use strict";
 	Object.defineProperties(module.exports, {
 		'Map': {
@@ -12,6 +12,18 @@
 		'Relation': {
 			'enumerable': true,
 			'value': require('./Relation')
+		},
+		'Connection': {
+			'enumerable': true,
+			'value': require('./Connection')
+		},
+		'Graph': {
+			'enumerable': true,
+			'value': require('./Graph')
+		},
+		'Network': {
+			'enumerable': true,
+			'value': require('./Network')
 		}
 	});
 })();

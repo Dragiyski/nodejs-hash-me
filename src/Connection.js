@@ -1,26 +1,25 @@
 (function() {
 	"use strict";
 	var Map = require('./Map'),
-		Set = require('./Set'),
-		Relation = module.exports = function() {
-			if(!(this instanceof Relation)) {
-				return new Relation;
+		Connection = module.exports = function() {
+			if(!(this instanceof Connection)) {
+				return new Connection;
 			}
-		Object.defineProperties(this, {
-			'_left': {
-				'value': new Map()
-			},
-			'_right': {
-				'value': new Map()
-			}
-		});
-	};
-	Relation.prototype = Object.create(Set.prototype, {
+			Object.defineProperties(this, {
+				'_left': {
+					'value': new Map()
+				},
+				'_right': {
+					'value': new Map()
+				}
+			});
+		};
+	Connection.prototype = Object.create(Map.prototype, {
 		'constructor': {
-			'value': Relation
+			'value': Connection
 		},
 		'name': {
-			'value': 'Relation'
+			'value': 'Connection'
 		},
 		'length': {
 			'enumerable': true,
@@ -30,26 +29,35 @@
 				}, 0, this);
 			}
 		},
-		'add': {
+		'set': {
+			'enumerable': true,
+			'value': function(left, right, value) {
+				var ls = this._left.get(left), rs = this._right.get(right);
+				if(!(ls instanceof Map)) {
+					this._left.set(left, ls = new Map());
+				}
+				if(!(rs instanceof Map)) {
+					this._right.set(right, rs = new Map());
+				}
+				var lres = ls.set(right, value);
+				var rres = rs.set(left, value);
+				return lres || rres;
+			}
+		},
+		'get': {
 			'enumerable': true,
 			'value': function(left, right) {
-				var ls = this._left.get(left), rs = this._right.get(right);
-				if(!(ls instanceof Set)) {
-					this._left.set(left, ls = new Set());
+				var m = this._left.get(left);
+				if(m instanceof Map) {
+					return m.get(right);
 				}
-				if(!(rs instanceof Set)) {
-					this._right.set(right, rs = new Set());
-				}
-				var lres = ls.add(right);
-				var rres = rs.add(left);
-				return lres || rres;
 			}
 		},
 		'has': {
 			'enumerable': true,
 			'value': function (left, right) {
 				var s = this._left.get(left);
-				if(s instanceof Set) {
+				if(s instanceof Map) {
 					return s.has(right);
 				}
 				return false;
@@ -59,7 +67,7 @@
 			'enumerable': true,
 			'value': function (left, right) {
 				var ls = this._left.get(left), rs = this._right.get(right);
-				if((ls instanceof Set) && (rs instanceof Set)) {
+				if((ls instanceof Map) && (rs instanceof Map)) {
 					ls.delete(right);
 					rs.delete(left);
 					return true;
@@ -70,14 +78,20 @@
 		'leftOf': {
 			'enumerable': true,
 			'value': function (right) {
-				var s = this._right.get(right), v = {}, i;
-				if(!(s instanceof Set)) {
-					return new Set();
+				var s = this._right.get(right), k = {}, v = {}, i;
+				if(!(s instanceof Map)) {
+					return new Map();
+				}
+				for(i in s._keys) {
+					k[i] = s._keys[i].slice(0);
 				}
 				for(i in s._values) {
 					v[i] = s._values[i].slice(0);
 				}
-				return Object.create(Set.prototype, {
+				return Object.create(Map.prototype, {
+					'_keys': {
+						'value': k
+					},
 					'_values': {
 						'value': v
 					}
@@ -87,14 +101,20 @@
 		'rightOf': {
 			'enumerable': true,
 			'value': function (left) {
-				var s = this._left.get(left), v = {}, i;
-				if(!(s instanceof Set)) {
-					return new Set();
+				var s = this._left.get(left), k = {}, v = {}, i;
+				if(!(s instanceof Map)) {
+					return new Map();
+				}
+				for(i in s._keys) {
+					k[i] = s._keys[i].slice(0);
 				}
 				for(i in s._values) {
 					v[i] = s._values[i].slice(0);
 				}
-				return Object.create(Set.prototype, {
+				return Object.create(Map.prototype, {
+					'_keys': {
+						'value': k
+					},
 					'_values': {
 						'value': v
 					}
@@ -108,8 +128,8 @@
 					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
 				}
 				this._left.forEach(function(s, l) {
-					s.forEach(function(r) {
-						cb.call(thisArg, l, r, this);
+					s.forEach(function(v, r) {
+						cb.call(thisArg, v, l, r, this);
 					}, this);
 				}, this);
 				return this;
@@ -122,8 +142,8 @@
 					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
 				}
 				return this._left.every(function(s, l) {
-					return s.every(function(r) {
-						return cb.call(thisArg, l, r, this);
+					return s.every(function(v, r) {
+						return cb.call(thisArg, v, l, r, this);
 					}, this);
 				}, this);
 			}
@@ -135,8 +155,8 @@
 					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
 				}
 				return this._left.some(function(s, l) {
-					return s.some(function(r) {
-						return cb.call(thisArg, l, r, this);
+					return s.some(function(v, r) {
+						return cb.call(thisArg, v, l, r, this);
 					}, this);
 				}, this);
 			}
@@ -147,10 +167,10 @@
 				if(typeof(cb) !== 'function') {
 					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
 				}
-				var n = new Relation();
-				this.forEach(function(l, r) {
-					if(cb.call(thisArg, l, r, this)) {
-						r.add(l, r);
+				var n = new Connection();
+				this.forEach(function(v, l, r) {
+					if(cb.call(thisArg, v, l, r, this)) {
+						n.set(l, r, v);
 					}
 				}, this);
 				return n;
@@ -162,92 +182,82 @@
 				if(typeof(cb) !== 'function') {
 					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
 				}
-				this.forEach(function(l, r) {
-					value = cb.call(thisArg, value, l, r, this);
+				this.forEach(function(v, l, r) {
+					value = cb.call(thisArg, value, v, l, r, this);
 				}, this);
 				return value;
 			}
 		},
 		'find': {
 			'enumerable': true,
-			'value': function(cb, thisArg) {
+			'value': function (cb, thisArg) {
 				if(typeof(cb) !== 'function') {
 					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
 				}
 				var result;
-				return this.some(function(l, r) {
-					if(cb.call(thisArg, l, r, this)) {
+				this.some(function(v, l, r) {
+					if(cb.call(thisArg, v, l, r, this)) {
+						result = v;
+						return true;
+					}
+					return false;
+				}, this);
+				return result;
+			}
+		},
+		'findKey': {
+			'enumerable': true,
+			'value': function (cb, thisArg) {
+				if(typeof(cb) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(cb) + ' is not a function');
+				}
+				var result;
+				this.some(function(v, l, r) {
+					if(cb.call(thisArg, v, l, r, this)) {
 						result = [l, r];
 						return true;
 					}
 					return false;
 				}, this);
+				return result;
 			}
 		},
-		'union': {
+		'merge': {
 			'enumerable': true,
-			'value': function(relation) {
-				if(!(relation instanceof Relation)) {
-					throw new TypeError('Expected arguments[0] to be [object Relation], got ' + Object.prototype.toString.call(relation));
+			'value': function() {
+				var n = new Connection(), i;
+				this.forEach(function(v, l, r) {
+					n.set(l, r, v);
+				});
+				for(i = 0; i < arguments.length; ++i) {
+					if(!(arguments[i] instanceof Connection)) {
+						throw new TypeError('Expected arguments[0] to be [object Relation], got ' + Object.prototype.toString.call(arguments[i]));
+					}
+					arguments[i].forEach(function(v, l, r) {
+						n.set(l, r, v);
+					});
 				}
-				var r = new Relation();
-				this.forEach(function(l, r) {
-					r.add(l, r);
-				});
-				relation.forEach(function(l, r) {
-					r.add(l, r);
-				});
-				return r;
+				return n;
 			}
 		},
-		'intersection': {
+		'keys': {
 			'enumerable': true,
-			'value': function(relation) {
-				if(!(relation instanceof Relation)) {
-					throw new TypeError('Expected arguments[0] to be [object Relation], got ' + Object.prototype.toString.call(relation));
-				}
-				return this.filter(function(l, r) {
-					return relation.has(l, r);
+			'value': function() {
+				var n = [];
+				this.forEach(function(v, l, r) {
+					n.push([l, r]);
 				});
-
-			}
-		},
-		'subtract': {
-			'enumerable': true,
-			'value': function(relation) {
-				if(!(relation instanceof Relation)) {
-					throw new TypeError('Expected arguments[0] to be [object Relation], got ' + Object.prototype.toString.call(relation));
-				}
-				return this.filter(function(l, r) {
-					return !relation.has(l, r);
-				});
-			}
-		},
-		'subsetOf': {
-			'enumerable': true,
-			'value': function(relation) {
-				if(!(relation instanceof Relation)) {
-					return false;
-				}
-				return this.every(function(l, r) {
-					return relation.has(l, r);
-				});
-			}
-		},
-		'equals': {
-			'enumerable': true,
-			'value': function(relation) {
-				return this.subsetOf(relation) && relation.subsetOf(relation);
+				return n;
 			}
 		},
 		'values': {
 			'enumerable': true,
 			'value': function() {
-				var r = [];
-				this.forEach(function(l, r) {
-					r.push([l, r]);
+				var n = [];
+				this.forEach(function(v, l, r) {
+					n.push(v);
 				});
-				return r;
+				return n;
 			}
 		},
 		'isEmpty': {

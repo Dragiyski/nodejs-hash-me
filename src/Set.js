@@ -1,18 +1,16 @@
-module.exports = (function() {
+(function () {
 	"use strict";
-	var hash = require('./hash');
-
-	function Set() {
-		if(!(this instanceof Set)) {
-			return new Set();
-		}
-		Object.defineProperties(this, {
-			'_values': {
-				'value': {}
+	var hash = require('./hash'),
+		Set = module.exports = function () {
+			if (!(this instanceof Set)) {
+				return new Set;
 			}
-		});
-	}
-
+			Object.defineProperties(this, {
+				'_values': {
+					'value': {}
+				}
+			});
+		};
 	Set.prototype = Object.create(Object.prototype, {
 		'constructor': {
 			'value': Set
@@ -22,9 +20,9 @@ module.exports = (function() {
 		},
 		'length': {
 			'enumerable': true,
-			'get': function() {
+			'get': function () {
 				var l = 0;
-				for(var i in this._values) {
+				for (var i in this._values) {
 					l += this._values[i].length;
 				}
 				return l;
@@ -32,20 +30,23 @@ module.exports = (function() {
 		},
 		'add': {
 			'enumerable': true,
-			'value': function(value) {
+			'value': function (value) {
 				var hashKey = hash(value);
-				if(!(this._values[hashKey] instanceof Array)) {
+				if (!(this._values[hashKey] instanceof Array)) {
 					this._values[hashKey] = [value];
-				} else if(this._values[hashKey].indexOf(value) === -1) {
+					return true;
+				} else if (this._values[hashKey].indexOf(value) === -1) {
 					this._values[hashKey].push(value);
+					return true;
 				}
+				return false;
 			}
 		},
 		'has': {
 			'enumerable': true,
-			'value': function(value) {
+			'value': function (value) {
 				var hashKey = hash(value);
-				if(this._values[hashKey] instanceof Array) {
+				if (this._values[hashKey] instanceof Array) {
 					return this._values[hashKey].indexOf(value) !== -1;
 				}
 				return false;
@@ -53,13 +54,13 @@ module.exports = (function() {
 		},
 		'delete': {
 			'enumerable': true,
-			'value': function(value) {
+			'value': function (value) {
 				var hashKey = hash(value);
-				if(this._values[hashKey] instanceof Array) {
+				if (this._values[hashKey] instanceof Array) {
 					var index = this._values[hashKey].indexOf(value);
-					if(index !== -1) {
+					if (index !== -1) {
 						this._values[hashKey].splice(index, 1);
-						if(this._values[hashKey].length === 0) {
+						if (this._values[hashKey].length === 0) {
 							delete this._values[hashKey];
 						}
 						return true;
@@ -71,21 +72,28 @@ module.exports = (function() {
 		'forEach': {
 			'enumerable': true,
 			'value': function (callback, thisArg) {
+				if (typeof(callback) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(callback) + ' is not a function');
+				}
 				var i, j;
 				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
 						callback.call(thisArg, this._values[i][j], this);
 					}
 				}
+				return this;
 			}
 		},
 		'every': {
 			'enumerable': true,
 			'value': function (callback, thisArg) {
+				if (typeof(callback) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(callback) + ' is not a function');
+				}
 				var i, j;
 				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
-						if(!callback.call(thisArg, this._values[i][j], this)) {
+						if (!callback.call(thisArg, this._values[i][j], this)) {
 							return false;
 						}
 					}
@@ -96,10 +104,13 @@ module.exports = (function() {
 		'some': {
 			'enumerable': true,
 			'value': function (callback, thisArg) {
+				if (typeof(callback) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(callback) + ' is not a function');
+				}
 				var i, j;
 				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
-						if(callback.call(thisArg, this._values[i][j], this)) {
+						if (callback.call(thisArg, this._values[i][j], this)) {
 							return true;
 						}
 					}
@@ -110,11 +121,14 @@ module.exports = (function() {
 		'filter': {
 			'enumerable': true,
 			'value': function (callback, thisArg) {
+				if (typeof(callback) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(callback) + ' is not a function');
+				}
 				var i, j, v = {};
 				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
-						if(callback.call(thisArg, this._values[i][j], this)) {
-							if(!(v[i] instanceof Array)) {
+						if (callback.call(thisArg, this._values[i][j], this)) {
+							if (!(v[i] instanceof Array)) {
 								v[i] = [];
 							}
 							v[i].push(this._values[i][j]);
@@ -130,7 +144,10 @@ module.exports = (function() {
 		},
 		'reduce': {
 			'enumerable': true,
-			'value': function(callback, value, thisArg) {
+			'value': function (callback, value, thisArg) {
+				if (typeof(callback) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(callback) + ' is not a function');
+				}
 				var i, j;
 				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
@@ -142,11 +159,14 @@ module.exports = (function() {
 		},
 		'find': {
 			'enumerable': true,
-			'value': function(callback, thisArg) {
+			'value': function (callback, thisArg) {
+				if (typeof(callback) !== 'function') {
+					throw new TypeError(Object.prototype.toString.call(callback) + ' is not a function');
+				}
 				var i, j;
 				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
-						if(callback.call(thisArg, this._values[i][j], this)) {
+						if (callback.call(thisArg, this._values[i][j], this)) {
 							return this._values[i][j];
 						}
 					}
@@ -155,22 +175,22 @@ module.exports = (function() {
 		},
 		'union': {
 			'enumerable': true,
-			'value': function(set) {
-				if(!(set instanceof Set)) {
+			'value': function (set) {
+				if (!(set instanceof Set)) {
 					throw new TypeError('Expected arguments[0] to be [object Set], got ' + Object.prototype.toString.call(set));
 				}
 				var i, j, v = {};
-				for(i in this._values) {
-					for(j = 0; j < this._values[i].length; ++j) {
-						if(!(v[i] instanceof Array)) {
+				for (i in this._values) {
+					for (j = 0; j < this._values[i].length; ++j) {
+						if (!(v[i] instanceof Array)) {
 							v[i] = [];
 						}
 						v[i].push(this._values[i][j]);
 					}
 				}
-				for(i in set._values) {
-					for(j = 0; j < set._values[i].length; ++j) {
-						if(!(v[i] instanceof Array)) {
+				for (i in set._values) {
+					for (j = 0; j < set._values[i].length; ++j) {
+						if (!(v[i] instanceof Array)) {
 							v[i] = [];
 						}
 						v[i].push(set._values[i][j]);
@@ -185,14 +205,14 @@ module.exports = (function() {
 		},
 		'intersection': {
 			'enumerable': true,
-			'value': function(set) {
-				if(!(set instanceof Set)) {
+			'value': function (set) {
+				if (!(set instanceof Set)) {
 					throw new TypeError('Expected arguments[0] to be [object Set], got ' + Object.prototype.toString.call(set));
 				}
 				var i, j, v = {};
-				for(i in this._values) {
-					for(j = 0; j < this._values[i].length; ++j) {
-						if(set.has(v[i][j])) {
+				for (i in this._values) {
+					for (j = 0; j < this._values[i].length; ++j) {
+						if (set.has(v[i][j])) {
 							if (!(v[i] instanceof Array)) {
 								v[i] = [];
 							}
@@ -209,14 +229,14 @@ module.exports = (function() {
 		},
 		'subtract': {
 			'enumerable': true,
-			'value': function(set) {
-				if(!(set instanceof Set)) {
+			'value': function (set) {
+				if (!(set instanceof Set)) {
 					throw new TypeError('Expected arguments[0] to be [object Set], got ' + Object.prototype.toString.call(set));
 				}
 				var i, j, v = {};
-				for(i in this._values) {
-					for(j = 0; j < this._values[i].length; ++j) {
-						if(!set.has(v[i][j])) {
+				for (i in this._values) {
+					for (j = 0; j < this._values[i].length; ++j) {
+						if (!set.has(v[i][j])) {
 							if (!(v[i] instanceof Array)) {
 								v[i] = [];
 							}
@@ -233,12 +253,12 @@ module.exports = (function() {
 		},
 		'subsetOf': {
 			'enumerable': true,
-			'value': function(set) {
-				if(!(set instanceof Set)) {
+			'value': function (set) {
+				if (!(set instanceof Set)) {
 					throw new TypeError('Expected arguments[0] to be [object Set], got ' + Object.prototype.toString.call(set));
 				}
 				var i, j;
-				for(i in this._values) {
+				for (i in this._values) {
 					for (j = 0; j < this._values[i].length; ++j) {
 						if (!set.has(this._values[i][j])) {
 							return false;
@@ -250,22 +270,23 @@ module.exports = (function() {
 		},
 		'equals': {
 			'enumerable': true,
-			'value': function(set) {
+			'value': function (set) {
 				return this.subsetOf(set) && set.subsetOf(this);
 			}
 		},
 		'values': {
 			'enumerable': true,
-			'value': function() {
-				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._values).map(function(h) { return this._values[h] }, this));
+			'value': function () {
+				return Array.prototype.concat.apply([], Object.getOwnPropertyNames(this._values).map(function (h) {
+					return this._values[h]
+				}, this));
 			}
 		},
 		'isEmpty': {
 			'enumerable': true,
-			'value': function() {
+			'value': function () {
 				return Object.getOwnPropertyNames(this._values).length === 0;
 			}
 		}
 	});
-	return Set;
 })();
