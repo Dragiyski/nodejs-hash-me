@@ -23,13 +23,15 @@ The third row present collections using its corresponding first and second rows 
 of values called _nodes_ with some __Relation__ between the nodes, called _edges_. The __Graph__ just stores both 
 values and their correlation, while the __Network__ maps additional value to each value and correlation, describing it.
 
-__Warning:__ While the __Set__, __Map__, __Relation__ posses linear ordering. While element order cannot be controlled 
-by the interface, elements inside can be ordered along a line. In fact the __forEach__ method will call the callback 
-sequentially by the internal order of elements. The __Graph__ is mathematical object of second order, its elements 
-cannot be ordered along a line. However it consist of linearly ordered edges and linearly ordered nodes. If taking both 
-edges and nodes, we can "order" them along two dimensional grid with some elements of the grid are empty. Because of 
-that _two_ dimensional ordering, the __Graph__ is called _second_ order collection. It means it cannot be iterated 
-linearly.
+__Warning:__ The __Set__, __Map__, __Relation__, __Connection__ posses linear ordering. This means that elements can be 
+arranged along the line. The order is implementation specific, but there is such an order. For example calling 
+__forEach__ method to any of this collection will call the callback with first element, then with the second and so on. 
+The __Graph__ and the __Network__ posses no such simple ordering. While processing the correlation and values 
+separately give them linear ordering, the graph can be ordered by more complex method in two dimensional grid instead 
+of line. Such ordering present only two basic method for iteration: 
+[DFS](http://en.wikipedia.org/wiki/Depth-first_search) and [BFS](http://en.wikipedia.org/wiki/Breadth-first_search). 
+However other algorithms exists for iteration, some of which are faster for more concrete problems. Therefore this 
+library does not currently take responsibility to iterate the second order collections - __Graph__ and __Network__.
 
 ## <a name="reference">Reference</a>
 
