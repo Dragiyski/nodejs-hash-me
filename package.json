@@ -22,7 +22,7 @@
     "install": "node ./install.js"
   },
   "dependencies": {
-    "node-gyp": "1.0.1",
+    "node-gyp": "1.0.x",
     "mkdirp": "*"
   },
   "main": "src/main.js",
