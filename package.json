@@ -26,5 +26,5 @@
     "mkdirp": "*"
   },
   "main": "src/main.js",
-  "version": "0.2.4"
+  "version": "0.3.0"
 }
