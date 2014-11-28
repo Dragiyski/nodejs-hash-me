@@ -5,14 +5,8 @@
 			if (!(this instanceof Map)) {
 				return new Map;
 			}
-			Object.defineProperties(this, {
-				'_keys': {
-					'value': {}
-				},
-				'_values': {
-					'value': {}
-				}
-			});
+			this._keys = {};
+			this._values = {};
 		};
 	Map.prototype = Object.create(Object.prototype, {
 		'constructor': {
@@ -166,16 +160,10 @@
 						}
 					}
 				}
-				//Although we are not calling the constructor
-				//returned object is instanceof Map and has exactly the same properties.
-				return Object.create(Map.prototype, {
-					'_keys': {
-						'value': k
-					},
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Map.prototype);
+				o._keys = k;
+				o._values = v;
+				return o;
 			}
 		},
 		'reduce': {
@@ -268,14 +256,10 @@
 				}
 				//Although we are not calling the constructor
 				//returned object is instanceof Map and has exactly the same properties.
-				return Object.create(Map.prototype, {
-					'_keys': {
-						'value': k
-					},
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Map.prototype);
+				o._keys = k;
+				o._values = v;
+				return o;
 			}
 		},
 		'keys': {

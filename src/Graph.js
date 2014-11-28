@@ -6,6 +6,8 @@
 			if (!(this instanceof Graph)) {
 				return new Graph;
 			}
+			this._nodes = new Set();
+			this._edges = new Relation();
 			Object.defineProperties(this, {
 				'_nodes': {
 					'value': new Set()

@@ -5,11 +5,7 @@
 			if (!(this instanceof Set)) {
 				return new Set;
 			}
-			Object.defineProperties(this, {
-				'_values': {
-					'value': {}
-				}
-			});
+			this._values = {};
 		};
 	Set.prototype = Object.create(Object.prototype, {
 		'constructor': {
@@ -135,11 +131,9 @@
 						}
 					}
 				}
-				return Object.create(Set.prototype, {
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Set.prototype);
+				o._values = v;
+				return o;
 			}
 		},
 		'reduce': {
@@ -196,11 +190,9 @@
 						v[i].push(set._values[i][j]);
 					}
 				}
-				return Object.create(Set.prototype, {
-					'_value': {
-						'value': v
-					}
-				});
+				var o = Object.create(Set.prototype);
+				o._values = v;
+				return o;
 			}
 		},
 		'intersection': {
@@ -220,11 +212,9 @@
 						}
 					}
 				}
-				return Object.create(Set.prototype, {
-					'_value': {
-						'value': v
-					}
-				});
+				var o = Object.create(Set.prototype);
+				o._values = v;
+				return o;
 			}
 		},
 		'subtract': {
@@ -244,11 +234,9 @@
 						}
 					}
 				}
-				return Object.create(Set.prototype, {
-					'_value': {
-						'value': v
-					}
-				});
+				var o = Object.create(Set.prototype);
+				o._values = v;
+				return o;
 			}
 		},
 		'subsetOf': {

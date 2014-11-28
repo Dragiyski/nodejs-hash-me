@@ -6,14 +6,8 @@
 			if(!(this instanceof Relation)) {
 				return new Relation;
 			}
-		Object.defineProperties(this, {
-			'_left': {
-				'value': new Map()
-			},
-			'_right': {
-				'value': new Map()
-			}
-		});
+			this._left = new Map();
+			this._right = new Map();
 	};
 	Relation.prototype = Object.create(Set.prototype, {
 		'constructor': {
@@ -77,11 +71,9 @@
 				for(i in s._values) {
 					v[i] = s._values[i].slice(0);
 				}
-				return Object.create(Set.prototype, {
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Set.prototype);
+				o._values = v;
+				return o;
 			}
 		},
 		'rightOf': {
@@ -94,11 +86,9 @@
 				for(i in s._values) {
 					v[i] = s._values[i].slice(0);
 				}
-				return Object.create(Set.prototype, {
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Set.prototype);
+				o._values = v;
+				return o;
 			}
 		},
 		'forEach': {

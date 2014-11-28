@@ -5,14 +5,8 @@
 			if(!(this instanceof Connection)) {
 				return new Connection;
 			}
-			Object.defineProperties(this, {
-				'_left': {
-					'value': new Map()
-				},
-				'_right': {
-					'value': new Map()
-				}
-			});
+			this._left = new Map();
+			this._right = new Map();
 		};
 	Connection.prototype = Object.create(Map.prototype, {
 		'constructor': {
@@ -88,14 +82,10 @@
 				for(i in s._values) {
 					v[i] = s._values[i].slice(0);
 				}
-				return Object.create(Map.prototype, {
-					'_keys': {
-						'value': k
-					},
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Map.prototype);
+				o._keys = k;
+				o._values = v;
+				return o;
 			}
 		},
 		'rightOf': {
@@ -111,14 +101,10 @@
 				for(i in s._values) {
 					v[i] = s._values[i].slice(0);
 				}
-				return Object.create(Map.prototype, {
-					'_keys': {
-						'value': k
-					},
-					'_values': {
-						'value': v
-					}
-				});
+				var o = Object.create(Map.prototype);
+				o._keys = k;
+				o._values = v;
+				return o;
 			}
 		},
 		'forEach': {

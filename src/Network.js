@@ -6,14 +6,8 @@
 			if(!(this instanceof Network)) {
 				return new Network;
 			}
-			Object.defineProperties(this, {
-				'_nodes': {
-					'value': new Map()
-				},
-				'_edges': {
-					'value': new Connection()
-				}
-			});
+			this._nodes = new Map();
+			this._edges = new Connection();
 		};
 	Network.prototype = Object.create(Object.prototype, {
 		'constructor': {
