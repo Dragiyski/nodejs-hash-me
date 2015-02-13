@@ -39,8 +39,7 @@ void hash_main(v8::Handle<v8::Object> exports) {
     v8::Isolate *isolate = v8::Isolate::GetCurrent();
     v8::HandleScope scope(isolate);
     v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(isolate, MakeObjectHash);
-    exports->Set(v8::String::NewFromUtf8(isolate, "objectHash"), tpl->GetFunction(),
-        static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete));
+    exports->Set(v8::String::NewFromUtf8(isolate, "objectHash"), tpl->GetFunction());
 }
 
 NODE_MODULE(native, hash_main);
