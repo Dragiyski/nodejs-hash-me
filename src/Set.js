@@ -65,6 +65,13 @@
 				return false;
 			}
 		},
+		'clear': {
+			'enumerable': true,
+			'value': function () {
+				this._values = {};
+				return this;
+			}
+		},
 		'forEach': {
 			'enumerable': true,
 			'value': function (callback, thisArg) {

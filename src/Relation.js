@@ -61,6 +61,14 @@
 				return false;
 			}
 		},
+		'clear': {
+			'enumerable': true,
+			'value': function () {
+				this._left.clear();
+				this._right.clear();
+				return this;
+			}
+		},
 		'leftOf': {
 			'enumerable': true,
 			'value': function (right) {

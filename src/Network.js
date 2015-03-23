@@ -78,6 +78,14 @@
 				return this._edges.delete(parent, child);
 			}
 		},
+		'clear': {
+			'enumerable': true,
+			'value': function () {
+				this._nodes.clear();
+				this._edges.clear();
+				return this;
+			}
+		},
 		'incomingEdges': {
 			'enumerable': true,
 			'value': function(node) {

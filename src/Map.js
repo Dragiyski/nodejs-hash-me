@@ -67,6 +67,14 @@
 				return false;
 			}
 		},
+		'clear': {
+			'enumerable': true,
+			'value': function() {
+				this._keys = {};
+				this._values = {};
+				return this;
+			}
+		},
 		//Readers
 		'get': {
 			'enumerable': true,

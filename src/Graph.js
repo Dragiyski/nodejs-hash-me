@@ -8,14 +8,6 @@
 			}
 			this._nodes = new Set();
 			this._edges = new Relation();
-			Object.defineProperties(this, {
-				'_nodes': {
-					'value': new Set()
-				},
-				'_edges': {
-					'value': new Relation()
-				}
-			});
 		};
 	Graph.prototype = Object.create(Object.prototype, {
 		'constructor': {
@@ -65,6 +57,14 @@
 			'enumerable': true,
 			'value': function (parent, child) {
 				return this._edges.delete(parent, child);
+			}
+		},
+		'clear': {
+			'enumerable': true,
+			'value': function () {
+				this._nodes.clear();
+				this._edges.clear();
+				return this;
 			}
 		},
 		'incomingEdges': {
